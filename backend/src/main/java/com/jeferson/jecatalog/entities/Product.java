@@ -110,4 +110,12 @@ public class Product implements Serializable{
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 }
