@@ -42,11 +42,12 @@ public class Product implements Serializable{
 	
 	public Product() {}
 
-	public Product(Long id, String name, String description, Double price, Instant date) {
+	public Product(Long id, String name, String description, Double price, String imgUrl, Instant date) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
+		this.imgUrl = imgUrl;
 		this.date = date;
 	}
 
@@ -82,6 +83,13 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 	public Instant getDate() {
 		return date;
 	}
@@ -109,13 +117,5 @@ public class Product implements Serializable{
 			return false;
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
-	}
-
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
+	}	
 }
