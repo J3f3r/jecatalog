@@ -30,7 +30,7 @@ public class ProductRepositoryTests {
 	}
 	
 	@Test// nao precisa criar nada, soh consulta o banco de dados
-	public void findByIdShouldReturnNonemptyOptionalProducthenIDExists() {
+	public void findByIdShouldReturnNonemptyOptionalProductIDExists() {
 		//act
 		Optional <Product> result = repository.findById(existingId);
 		//assert
