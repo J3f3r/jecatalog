@@ -9,14 +9,28 @@ import java.util.Set;
 import com.jeferson.jecatalog.entities.Category;
 import com.jeferson.jecatalog.entities.Product;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public class ProductDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	
+	@Size(min = 5, max = 60, message = "deve ter entre 5 e 60 caracteres")
+	@NotBlank(message = "campo obrigatório")
 	private String name;
+	
+	@NotBlank(message = "campo obrigatório")
 	private String description;
+	
+	@Positive(message = "preço deve ser um valor positivo")
 	private Double price;
 	private String imgUrl;
+	
+	@PastOrPresent(message = "a data do produto não pode ser futura")
 	private Instant date;
 	
 	private List<CategoryDTO> categories = new ArrayList<>();
