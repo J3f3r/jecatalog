@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jeferson.jecatalog.dto.RoleDTO;
 import com.jeferson.jecatalog.dto.UserDTO;
 import com.jeferson.jecatalog.dto.UserInsertDTO;
+import com.jeferson.jecatalog.dto.UserUpdateDTO;
 import com.jeferson.jecatalog.entities.Role;
 import com.jeferson.jecatalog.entities.User;
 import com.jeferson.jecatalog.repositories.RoleRepository;
@@ -59,7 +60,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(Long id, UserUpdateDTO dto) {
 		try {
 			User entity = repository.getReferenceById(id);
 			copyDtoToEntity(dto, entity);
