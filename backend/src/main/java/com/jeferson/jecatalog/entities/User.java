@@ -31,7 +31,7 @@ public class User implements Serializable{
 	private String email;
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER)// forca a busca do usuario trazer sua role
+	@ManyToMany
 	@JoinTable(name = "tb_user_role",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -91,6 +91,19 @@ public class User implements Serializable{
 
 	public Set<Role> getRoles() {
 		return roles;
+	}
+	
+	public void addRole(Role role) {
+	    roles.add(role);
+	}
+
+	public boolean hasRole(String roleName) {// compara se o authority eh igual ao perfil informado pelo usuario e retorna F/V
+	    for (Role role : roles) {
+	        if (role.getAuthority().equals(roleName)) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 
 	@Override

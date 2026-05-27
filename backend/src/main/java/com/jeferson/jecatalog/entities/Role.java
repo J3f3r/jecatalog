@@ -34,6 +34,7 @@ public class Role implements Serializable{
 		this.id = id;
 	}
 
+	//@Override
 	public String getAuthority() {
 		return authority;
 	}
@@ -41,10 +42,10 @@ public class Role implements Serializable{
 	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(authority);
 	}
 
 	@Override
@@ -56,6 +57,6 @@ public class Role implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Role other = (Role) obj;
-		return id == other.id;
+		return Objects.equals(authority, other.authority);
 	}
 }
