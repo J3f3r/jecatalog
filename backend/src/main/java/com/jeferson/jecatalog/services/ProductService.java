@@ -1,10 +1,13 @@
 package com.jeferson.jecatalog.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,7 @@ import com.jeferson.jecatalog.dto.CategoryDTO;
 import com.jeferson.jecatalog.dto.ProductDTO;
 import com.jeferson.jecatalog.entities.Category;
 import com.jeferson.jecatalog.entities.Product;
+import com.jeferson.jecatalog.projection.ProductProjection;
 import com.jeferson.jecatalog.repositories.CategoryRepository;
 import com.jeferson.jecatalog.repositories.ProductRepository;
 import com.jeferson.jecatalog.services.exceptions.DatabaseException;
@@ -89,5 +93,26 @@ public class ProductService {
 			Category category = categoryRepository.getReferenceById(catDto.getId());// NAO vai tocar no banco de dados
 			entity.getCategories().add(category);
 		}
+	}
+
+	@Transactional(readOnly = true)
+	public Page<ProductDTO> findAllPaged(String name, String categoryId, Pageable pageable) {
+		
+//		String[] vet = categoryId.split(",");// posicao [0] temos a pag 1 e na posicao [1] a pag 3
+//		List<String> list = Arrays.asList(vet);// gerei um vetor de string, com esse vetor gerei uma lista para converte-la em Long
+//		List<Long> categoryId = list.stream().map(x -> Long.parseLong(x)).toList();// essas 3 linhas serao resumidas na linha abaixo
+//		List<Long> categoryIds = Arrays.asList(categoryId.split(",")).stream().map(Long::parseLong).toList();
+
+		List<Long> categoryIds = Arrays.asList();
+		if (!"0".equals(categoryId)) {
+			categoryIds = Arrays.asList(categoryId.split(",")).stream().map(Long::parseLong).toList();
+		}
+		Page<ProductProjection> page =repository.searchProducts(categoryIds, name, pageable);		
+		List<Long> productIds = page.map(x -> x.getId()).toList();
+		
+		List<Product> entities = repository.searchProductWithCategories(productIds);
+		List<ProductDTO> dtos = entities.stream().map(p -> new ProductDTO(p, p.getCategories())).toList();
+		
+		return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
 	}
 }

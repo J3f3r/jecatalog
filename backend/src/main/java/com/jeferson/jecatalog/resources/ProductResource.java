@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jeferson.jecatalog.dto.ProductDTO;
+import com.jeferson.jecatalog.projection.ProductProjection;
 import com.jeferson.jecatalog.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -30,15 +32,12 @@ public class ProductResource {
 	private ProductService service;
 	
 	@GetMapping
-	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
-//			@RequestParam(defaultValue = "0") Integer page,
-//			@RequestParam(defaultValue = "12") Integer linesPerPage,
-//			@RequestParam(defaultValue = "ASC") String direction,
-//			@RequestParam(defaultValue = "moment") String orderBy
-//			){
-//		// refatorado com page, size e sort
-//		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		Page<ProductDTO> list = service.findAllPaged(pageable);//pageRequest
+	public ResponseEntity<Page<ProductDTO>> findAll(
+			@RequestParam(defaultValue = " ") String name,// valor padrao caso nao seja informado o valor de consulta na url da requisicao
+			@RequestParam(defaultValue = "0") String categoryId,
+			Pageable pageable){
+
+		Page<ProductDTO> list = service.findAllPaged(name, categoryId, pageable);//pageRequest
 		return ResponseEntity.ok().body(list);
 	}
 	
