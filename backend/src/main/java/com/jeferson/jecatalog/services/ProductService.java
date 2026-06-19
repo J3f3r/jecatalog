@@ -21,6 +21,7 @@ import com.jeferson.jecatalog.repositories.CategoryRepository;
 import com.jeferson.jecatalog.repositories.ProductRepository;
 import com.jeferson.jecatalog.services.exceptions.DatabaseException;
 import com.jeferson.jecatalog.services.exceptions.ResourceNotFoundException;
+import com.jeferson.jecatalog.util.Utils;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -95,6 +96,7 @@ public class ProductService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(String name, String categoryId, Pageable pageable) {
 		
@@ -111,6 +113,8 @@ public class ProductService {
 		List<Long> productIds = page.map(x -> x.getId()).toList();
 		
 		List<Product> entities = repository.searchProductWithCategories(productIds);
+		entities = (List<Product>) Utils.replace(page.getContent(), entities);
+		
 		List<ProductDTO> dtos = entities.stream().map(p -> new ProductDTO(p, p.getCategories())).toList();
 		
 		return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());

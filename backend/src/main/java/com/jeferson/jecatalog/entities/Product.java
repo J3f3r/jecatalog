@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.jeferson.jecatalog.projection.IdProjection;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +20,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_product")
-public class Product implements Serializable{
+public class Product implements Serializable, IdProjection<Long>{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -51,6 +53,7 @@ public class Product implements Serializable{
 		this.date = date;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jeferson.jecatalog.dto.ProductDTO;
-import com.jeferson.jecatalog.projection.ProductProjection;
 import com.jeferson.jecatalog.services.ProductService;
 
 import jakarta.validation.Valid;
