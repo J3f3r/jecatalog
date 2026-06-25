@@ -61,6 +61,10 @@ public class UserService implements UserDetailsService{
 		User entity = new User();
 		copyDtoToEntity(dto, entity);
 		
+		entity.getRoles().clear();
+		Role role = roleRepository.findByAuthority("ROLE_OPERATOR");
+		entity.getRoles().add(role);// aqui atribuimos ao novo usuario a role operator manualmente e ignoramos a role que vem no JSON 
+		
 		entity.setPassword(passwordEncoder.encode(dto.getPassword()));
 		// linha adicionada para pegar a senha
 		entity = repository.save(entity);

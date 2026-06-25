@@ -56,7 +56,8 @@ public class ResourceExceptionHandler {
 		err.setStatus(statusCode);
 		
 		err.setError("Validation exception");
-		err.setMessage(e.getMessage());
+		//err.setMessage(e.getMessage());
+		err.setMessage("Erro de validação nos campos preenchidos");
 		err.setPath(request.getRequestURI());
 		
 		for(FieldError f : e.getBindingResult().getFieldErrors()) {
