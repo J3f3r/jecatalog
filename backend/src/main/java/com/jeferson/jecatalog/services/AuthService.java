@@ -1,14 +1,17 @@
 package com.jeferson.jecatalog.services;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeferson.jecatalog.dto.EmailDTO;
+import com.jeferson.jecatalog.dto.NewPasswordDTO;
 import com.jeferson.jecatalog.entities.PasswordRecover;
 import com.jeferson.jecatalog.entities.User;
 import com.jeferson.jecatalog.repositories.PasswordRecoverRepository;
@@ -23,6 +26,9 @@ public class AuthService {
 	
 	@Value("${email.password-recover.token.minutes}")
 	private Long tokenMinutes;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private PasswordRecoverRepository passwordRecoverRepository;
@@ -66,5 +72,21 @@ public class AuthService {
 		String text = "Acesse o link para definir uma nova senha \n\n"
 				+ recoverUri + token + ". Validade de" + tokenMinutes + " minutos";
 		emailService.sendEmail(body.getEmail(), "Recuperação de senha", text);
+	}
+
+	@Transactional
+	public void saveNewPassword(NewPasswordDTO body) {
+		
+		List<PasswordRecover> result = passwordRecoverRepository.searchValidTokens(body.getToken(), Instant.now());
+		
+		if(result.size() == 0) {
+			throw new ResourceNotFoundException("Email não encontrado!");
+		}
+		
+		User user = userRepository.findByEmail(result.get(0).getEmail());
+		
+		user.setPassword(passwordEncoder.encode(body.getPassword()));
+		
+		user = userRepository.save(user);
 	}
 }

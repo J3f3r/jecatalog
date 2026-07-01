@@ -30,7 +30,7 @@ public class PasswordRecover {
 	public PasswordRecover() {}
 
 	public PasswordRecover(Long id, String token, String email, Instant expiration) {
-		super();
+
 		this.id = id;
 		this.token = token;
 		this.email = email;
