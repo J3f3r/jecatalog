@@ -43,12 +43,21 @@ public class UserService implements UserDetailsService{
 	@Lazy//  quebra referencias circulares
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private AuthService authService;
+	
 	@Transactional(readOnly = true)
 	public Page<UserDTO> findAllPaged(Pageable pageable){
 		Page<User> list = repository.findAll(pageable);
 		return list.map(x -> new UserDTO(x));
 	}
 
+	@Transactional(readOnly = true)// busca o usuario que estiver autenticado
+	public UserDTO findMe() {
+		User entity = authService.authenticated();
+		return new UserDTO(entity);
+	}
+	
 	@Transactional(readOnly = true)
 	public UserDTO findById(Long id) {
 		Optional <User> obj = repository.findById(id);
