@@ -1,8 +1,11 @@
 # 🚀 Jecatalog API
 
-[![Java 21](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<br>
+<p align="left">
+  <img src="https://img.shields.io/badge/Java-21-orange.svg" alt="Java 21" />
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License MIT" />
+</p>
 
 > Sistema corporativo de Catálogo de Produtos e Categorias desenvolvido com arquitetura em camadas em Java 21 e Spring Boot 3.x, focado em alta performance de consultas, segurança robusta com OAuth2/JWT e padrões rigorosos de testes automatizados.
 
