@@ -1,19 +1,21 @@
 package com.jeferson.jecatalog.services;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jeferson.jecatalog.dto.CategoryDTO;
 import com.jeferson.jecatalog.dto.ProductDTO;
+import com.jeferson.jecatalog.dto.UriDTO;
 import com.jeferson.jecatalog.entities.Category;
 import com.jeferson.jecatalog.entities.Product;
 import com.jeferson.jecatalog.projection.ProductProjection;
@@ -27,12 +29,20 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductService {
-
-	@Autowired
-	private ProductRepository repository;
 	
-	@Autowired
-	private CategoryRepository categoryRepository;
+	
+
+	private final ProductRepository repository;
+	
+	private final CategoryRepository categoryRepository;
+
+	private final S3Service s3Service;
+	
+	ProductService(S3Service s3Service, ProductRepository repository, CategoryRepository categoryRepository) {
+		this.s3Service = s3Service;
+		this.repository = repository;
+		this.categoryRepository = categoryRepository;
+	}
 	
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(Pageable pageable){
@@ -118,5 +128,11 @@ public class ProductService {
 		List<ProductDTO> dtos = entities.stream().map(p -> new ProductDTO(p, p.getCategories())).toList();
 		
 		return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
+	}
+
+	public UriDTO uploadFile(MultipartFile file) {
+		
+		URL url = s3Service.uploadFile(file);
+		return new UriDTO(url.toString());
 	}
 }

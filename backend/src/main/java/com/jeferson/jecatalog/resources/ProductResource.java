@@ -2,7 +2,6 @@ package com.jeferson.jecatalog.resources;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jeferson.jecatalog.dto.ProductDTO;
+import com.jeferson.jecatalog.dto.UriDTO;
 import com.jeferson.jecatalog.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -27,8 +28,11 @@ import jakarta.validation.Valid;
 @RequestMapping(value = "/products")
 public class ProductResource {
 
-	@Autowired
-	private ProductService service;
+	private final ProductService service;
+
+	ProductResource(ProductService service) {
+		this.service = service;
+	}
 	
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(
@@ -54,6 +58,13 @@ public class ProductResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(dto.getId()).toUri();
 		return ResponseEntity.created(uri).body(dto);
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OPERATOR')")
+	@PostMapping(value = "/image")
+	public ResponseEntity<UriDTO> uploadImage(@RequestParam MultipartFile file){
+		UriDTO dto = service.uploadFile(file);
+		return ResponseEntity.ok().body(dto);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OPERATOR')")
